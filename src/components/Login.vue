@@ -15,12 +15,19 @@
       >
         <!-- 用户名 -->
         <el-form-item prop="username">
-          <el-input prefix-icon="iconfont icon-yonghuming
-" v-model="loginForm.username"></el-input>
+          <el-input
+            prefix-icon="iconfont icon-yonghuming
+"
+            v-model="loginForm.account"
+          ></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item prop="password">
-          <el-input prefix-icon="iconfont icon-mima" v-model="loginForm.password" type="password"></el-input>
+          <el-input
+            prefix-icon="iconfont icon-mima"
+            v-model="loginForm.password"
+            type="password"
+          ></el-input>
         </el-form-item>
         <!-- 按钮区 -->
         <el-form-item class="btns">
@@ -34,64 +41,62 @@
 
 <script>
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     return {
       loginForm: {
-        username: "admin",
-        password: "123456"
+        account: '123456',
+        password: '123456',
       },
       loginRules: {
         // 验证用户名是否合法
-        username: [
+        account: [
           {
             required: true,
-            message: "请输入登录名称",
-            trigger: "blur"
+            message: '请输入登录名称',
+            trigger: 'blur',
           },
           {
             min: 3,
             max: 16,
-            message: "用户名长度需为3~16位之间",
-            trigger: "blur"
-          }
+            message: '用户名长度需为3~16位之间',
+            trigger: 'blur',
+          },
         ],
         // 验证密码是否合法
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 16, message: "密码需要在6~16位之间", trigger: "blur" }
-        ]
-      }
-    };
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 16, message: '密码需要在6~16位之间', trigger: 'blur' },
+        ],
+      },
+    }
   },
   methods: {
     reset() {
       // console.log(this);
-      this.$refs.loginFormRef.resetFields();
+      this.$refs.loginFormRef.resetFields()
     },
     loginbtn() {
-      this.$refs.loginFormRef.validate(async valid => {
-        if (!valid) return;
-        //post方法返回一个Promise对象 使用async 函数
-        //async表示该函数中有异步操作 await表示后面表达式需要等待结果
-        //使用对象解构 并起别名，此时获得的data数据干净
-        const { data: res } = await this.$http.post("login", this.loginForm);
+      console.log('121212')
+      this.$refs.loginFormRef.validate(async (valid) => {
+        if (!valid) return
+        const res = await this.$http.post('login', this.loginForm)
         //通过res.meta.status状态码判断请求
-        console.log(res);
+        console.log(res, 'res')
 
-        if (res.meta.status !== 200) {
-          return this.$message.error("登陆失败！");
-        }
-        this.$message({
-          message: "登录成功！",
-          type: "success"
-        });
-        window.sessionStorage.setItem("token", res.data.token);
-        this.$router.push("/home");
-      });
-    }
-  }
-};
+        // if (res.meta.status !== 200) {
+        //   return this.$message.error('登陆失败！')
+        // }
+        // this.$message({
+        //   message: '登录成功！',
+        //   type: 'success',
+        // })
+        // window.sessionStorage.setItem('token', res.data.token)
+        // this.$router.push('/home')
+      })
+    },
+  },
+}
 </script>
 
 <style lang="less" scoped>

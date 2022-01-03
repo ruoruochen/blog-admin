@@ -1,62 +1,97 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+const Login = () =>
+  import(/* webpackChunkName: "login_home_welcome" */ '../components/Login')
+const Home = () =>
+  import(/* webpackChunkName: "login_home_welcome" */ '../components/Home')
+const Welcome = () =>
+  import(/* webpackChunkName: "login_home_welcome" */ '../components/Welcome')
 
-const Login = () => import(/* webpackChunkName: "login_home_welcome" */ '../components/Login')
-const Home = () => import(/* webpackChunkName: "login_home_welcome" */ '../components/Home')
-const Welcome = () => import(/* webpackChunkName: "login_home_welcome" */ '../components/Welcome')
+const User = () =>
+  import(/* webpackChunkName: "user_rights_roles" */ '../components/user/User')
+const Rights = () =>
+  import(
+    /* webpackChunkName: "user_rights_roles" */ '../components/power/Rights'
+  )
+const Roles = () =>
+  import(
+    /* webpackChunkName: "user_rights_roles" */ '../components/power/Roles'
+  )
 
-const User = () => import(/* webpackChunkName: "user_rights_roles" */ '../components/user/User')
-const Rights = () => import(/* webpackChunkName: "user_rights_roles" */ '../components/power/Rights')
-const Roles = () => import(/* webpackChunkName: "user_rights_roles" */ '../components/power/Roles')
+const Cate = () =>
+  import(/* webpackChunkName: "cate_params" */ '../components/articles/Cate')
+const Params = () =>
+  import(/* webpackChunkName: "cate_params" */ '../components/articles/Params')
 
-const Cate = () => import(/* webpackChunkName: "cate_params" */ '../components/goods/Cate')
-const Params = () => import(/* webpackChunkName: "cate_params" */ '../components/goods/Params')
+const articlesList = () =>
+  import(
+    /* webpackChunkName: "articleslist_addarticles" */ '../components/articles/List'
+  )
+const Addarticles = () =>
+  import(
+    /* webpackChunkName: "articleslist_addarticles" */ '../components/articles/Add'
+  )
 
-const GoodsList = () => import(/* webpackChunkName: "goodslist_addgoods" */ '../components/goods/List')
-const AddGoods = () => import(/* webpackChunkName: "goodslist_addgoods" */ '../components/goods/Add')
-
-const Order = () => import(/* webpackChunkName: "order_report" */ '../components/order/Order')
-const Report = () => import(/* webpackChunkName: "order_report" */ '../components/report/Report')
+const Order = () =>
+  import(/* webpackChunkName: "order_report" */ '../components/order/Order')
+const Report = () =>
+  import(/* webpackChunkName: "order_report" */ '../components/report/Report')
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '',
-    redirect: '/login'
-
+    redirect: '/login',
   },
   {
     path: '/login',
-    component: Login
+    component: Login,
   },
   {
     path: '/home',
     component: Home,
     children: [
-      { path: "", redirect: '/welcome' },
-      { path: "/welcome", component: Welcome },
-      { path: "/users", component: User },
-      { path: "/rights", component: Rights },
-      { path: "/roles", component: Roles },
-      { path: "/categories", component: Cate },
-      { path: "/params", component: Params },
-      { path: "/goods", component: GoodsList },
-      { path: "/goods/add", component: AddGoods },
-      { path: "/orders", component: Order },
-      { path: "/reports", component: Report }
-    ]
-  }
+      { path: '', redirect: '/welcome' },
+      { path: '/welcome', component: Welcome },
+      { path: '/users', component: User },
+      { path: '/rights', component: Rights },
+      { path: '/roles', component: Roles },
+      { path: '/categories', component: Cate },
+      { path: '/params', component: Params },
+      { path: '/articles', component: articlesList },
+      { path: '/articles/add', component: Addarticles },
+      { path: '/orders', component: Order },
+      { path: '/reports', component: Report },
+    ],
+  },
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
 })
 
-router.beforeEach((to, form, next) => {
-  if (to.path === '/login') return next();
-  const token = window.sessionStorage.getItem('token');
-  if (!token) return next('/login');
-  next();
+router.beforeEach(async (to, form, next) => {
+  if (to.path === '/login') return next()
+  let token = ''
+  // 尝试拿5次token
+  token = await getSessionToken()
+  if (!token) return next('/login')
+  next()
 })
+
+async function getSessionToken() {
+  return await new Promise((resolve, reject) => {
+    let token = '',
+      count = 0
+    const timer = setInterval(() => {
+      if (token || count === 5) {
+        clearInterval(timer)
+        resolve(token)
+      }
+      count++
+      token = window.sessionStorage.getItem('token')
+    }, 200)
+  })
+}
 export default router

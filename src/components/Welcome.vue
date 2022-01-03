@@ -1,12 +1,22 @@
 <template>
-  <div>欢迎光临</div>
+  <div class="welcome-container">
+    <img
+      src="https://ruoruochen-img-bed.oss-cn-beijing.aliyuncs.com/img/202112042053014.webp"
+      alt="波吉"
+    />
+  </div>
 </template>
 
 <script>
 export default {
-  name: "Welcome"
-};
+  name: 'Welcome',
+}
 </script>
 
-<style>
+<style lang="less" scoped>
+.welcome-container {
+  img {
+    width: 100%;
+  }
+}
 </style>

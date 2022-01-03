@@ -3,15 +3,18 @@
     <!-- 头部区域 -->
     <el-header class="header">
       <div class="left_header">
-        <img src="@assets/images/touxiang.jpg" alt />
-        <span>电商管理系统</span>
+        <img
+          src="https://ruoruochen-img-bed.oss-cn-beijing.aliyuncs.com/img/202112052120216.jpeg"
+          alt
+        />
+        <span>博客后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
     </el-header>
     <!-- 页面主题区域 -->
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside :width="isCollapse?'64px': '200px'">
+      <el-aside :width="isCollapse ? '64px' : '200px'">
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!-- 侧边栏菜单区 -->
         <el-menu
@@ -25,20 +28,26 @@
           :default-active="$route.path"
         >
           <!-- 一级菜单 -->
-          <el-submenu :index="'/'+item.path" v-for="item in menuList" :key="item.id">
+          <el-submenu
+            :index="'/' + item.path"
+            v-for="item in menuList"
+            :key="item.id"
+          >
             <!-- 一级菜单的模板区 -->
             <template slot="title">
-              <!-- 图标 -->
-              <i class="iconfont" :class="iconList[item.id]"></i>
               <!-- 文本 -->
-              <span>{{item.authName}}</span>
+              <span>{{ item.authName }}</span>
             </template>
-            <el-menu-item :index="'/'+item2.path" v-for="item2 in item.children" :key="item2.id">
+            <el-menu-item
+              :index="'/' + item2.path"
+              v-for="item2 in item.children"
+              :key="item2.id"
+            >
               <template slot="title">
                 <!-- 图标 -->
                 <i class="el-icon-menu"></i>
                 <!-- 文本 -->
-                <span>{{item2.authName}}</span>
+                <span>{{ item2.authName }}</span>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -54,41 +63,62 @@
 
 <script>
 export default {
-  name: "Home",
+  name: 'Home',
   data() {
     return {
-      menuList: [],
-      iconList: {
-        "125": "icon-ziyuan",
-        "103": "icon-suo",
-        "101": "icon-shangpinchuangjian",
-        "102": "icon-danju",
-        "145": "icon-baobiao"
-      },
-      isCollapse: false
-    };
+      menuList: [
+        {
+          id: 2,
+          authName: '文章管理',
+          path: 'articles',
+          children: [
+            {
+              id: 21,
+              authName: '文章列表',
+              path: 'articles',
+              children: [],
+              order: null,
+            },
+            {
+              id: 22,
+              authName: '新增文章',
+              path: 'articles/add',
+              children: [],
+              order: null,
+            },
+          ],
+          order: 2,
+        },
+        {
+          id: 3,
+          authName: '用户管理',
+          path: 'users',
+          children: [
+            {
+              id: 31,
+              authName: '用户列表',
+              path: 'users',
+              children: [],
+              order: 1,
+            },
+          ],
+          order: 3,
+        },
+      ],
+      isCollapse: false,
+    }
   },
   methods: {
     logout() {
-      window.sessionStorage.clear();
-      this.$router.push("/login");
-    },
-    async getMunuList() {
-      //发送请求
-      const { data: res } = await this.$http.get("menus");
-      console.log(res);
-      if (res.meta.status !== 200) return this.$messgae.error(res.meta.msg);
-      this.menuList = res.data;
+      window.sessionStorage.clear()
+      this.$router.push('/login')
     },
     //点击按钮，切换菜单的展开和折叠
     toggleCollapse() {
-      this.isCollapse = !this.isCollapse;
-    }
+      this.isCollapse = !this.isCollapse
+    },
   },
-  created() {
-    this.getMunuList();
-  }
-};
+}
 </script>
 
 <style lang="less" scoped>

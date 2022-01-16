@@ -16,6 +16,7 @@
     "echarts": "^5.0.0",
     "element-ui": "^2.4.5",
     "lodash": "^4.17.20",
+    "mavon-editor": "^2.10.4",
     "nprogress": "^0.2.0",
     "speed-measure-webpack-plugin": "^1.5.0",
     "thread-loader": "^3.0.1",

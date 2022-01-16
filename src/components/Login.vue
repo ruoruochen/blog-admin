@@ -41,62 +41,63 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
       loginForm: {
-        account: '123456',
-        password: '123456',
+        account: "123456",
+        password: "123456",
       },
       loginRules: {
         // 验证用户名是否合法
         account: [
           {
             required: true,
-            message: '请输入登录名称',
-            trigger: 'blur',
+            message: "请输入登录名称",
+            trigger: "blur",
           },
           {
             min: 3,
             max: 16,
-            message: '用户名长度需为3~16位之间',
-            trigger: 'blur',
+            message: "用户名长度需为3~16位之间",
+            trigger: "blur",
           },
         ],
         // 验证密码是否合法
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 16, message: '密码需要在6~16位之间', trigger: 'blur' },
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 6, max: 16, message: "密码需要在6~16位之间", trigger: "blur" },
         ],
       },
-    }
+    };
   },
   methods: {
     reset() {
       // console.log(this);
-      this.$refs.loginFormRef.resetFields()
+      this.$refs.loginFormRef.resetFields();
     },
     loginbtn() {
-      console.log('121212')
+      console.log("121212");
       this.$refs.loginFormRef.validate(async (valid) => {
-        if (!valid) return
-        const res = await this.$http.post('login', this.loginForm)
+        if (!valid) return;
+        const res = await this.$http.post("login", this.loginForm);
         //通过res.meta.status状态码判断请求
-        console.log(res, 'res')
+        console.log(res, "res");
+        // alert("res" + JSON.stringify(res));
 
-        // if (res.meta.status !== 200) {
-        //   return this.$message.error('登陆失败！')
-        // }
-        // this.$message({
-        //   message: '登录成功！',
-        //   type: 'success',
-        // })
-        // window.sessionStorage.setItem('token', res.data.token)
-        // this.$router.push('/home')
-      })
+        if (res.status !== 200) {
+          return this.$message.error("登陆失败！");
+        }
+        this.$message({
+          message: "登录成功！",
+          type: "success",
+        });
+        window.sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+        this.$router.push("/home");
+      });
     },
   },
-}
+};
 </script>
 
 <style lang="less" scoped>
